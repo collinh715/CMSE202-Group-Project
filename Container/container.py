@@ -3,38 +3,54 @@ import random
 import time
 import numpy as np
 import matplotlib.pyplot as plt
+# import matplotlib.cm as cm
+import matplotlib.animation as animation
+import moviepy.editor as mp
+
 
 class Petri_dish():
     """Petri_dish class. 
     """
     
-    def __init__(self, xsize=1000, ysize=100, ):
+    def __init__(self, xsize=20, ysize=100 ):
         self.xsize = xsize
         self.ysize = ysize
-        self.environ = np.zeros((self.xsize,self.ysize,3))
-        self.environ[:,:,0] = 0.38
-        self.environ[:,:,1] = 0.19
-        self.environ[:,:,2] = 0.04
+        self.gradient = np.ones((self.xsize+1,self.ysize+1,1))
         self.bacteria_agents = []
+
+        gradient = []
+
+        gradient_step = 1/(ysize-1)
+
+        gradient_val = 0
+        for i in range(ysize):
+            gradient.append(gradient_val)
+            gradient_val += gradient_step
+        for i in range(ysize):
+
+            self.gradient[:,i] = self.gradient[:,i] * gradient[i]
+        
+
         o2_level=[1, .8, .7, .6, .5, .4, .3, .2, .1, 0]
         
 
-    
+   
     def add_agent(self,agent):
         self.bacteria_agents.append(agent)
     
     def simulate(self,tot_time):
         for dt in range(tot_time):
-            clear_output(wait=True)
+            # clear_output(wait=True)
             plt.figure(figsize=(6, 6))    
-            plt.imshow(self.environ) 
+            # plt.imshow(self.environ) 
             ax = plt.gca()   
             
             # loop over each animal
             temp_agents = []
             for agent in self.bacteria_agents:
-                agent.movement()
+                agent.movement(self.gradient)
                 agent.draw(ax)
+                temp_agents.append(agent)
                 
             self.bacteria_agents.clear
             self.bacteria_agents = temp_agents
@@ -52,7 +68,7 @@ class Petri_dish():
             # loop over each animal agent
             temp_agents = []
             for agent in self.bacteria_agents:
-                agent.movement()
+                agent.movement(self.gradient)
                 
             self.bacteria_agents.clear
             self.bacteria_agents = temp_agents
@@ -65,3 +81,41 @@ class Petri_dish():
 
         plt.plot(self.times,self.light_brown_animals)   
         plt.show()
+
+    def simulate_save(self,tot_time):
+        gradient = self.gradient
+        frames = []
+
+        fig = plt.figure()
+
+        for dt in range(tot_time):
+    
+            
+            # loop over each animal
+            temp_agents = []
+            x = []
+            y = []
+            for agent in self.bacteria_agents:
+                agent.movement(gradient,vx = 10,vy = 10)
+                if agent.alive(gradient) == True:
+                    temp_agents.append(agent)
+                    x.append(agent.get_loc()[0])
+                    y.append(agent.get_loc()[1])
+
+            self.bacteria_agents.clear
+            self.bacteria_agents = temp_agents
+
+            frames.append([plt.scatter(x,y,animated=True, color = 'r')])
+
+        plt.axis('off')
+        plt.xlim(0,self.xsize)
+        plt.ylim(0,self.ysize)
+
+
+        ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True,
+                                            repeat_delay=1000)
+        ani.save('movie.gif',fps= 2)
+        clip = mp.VideoFileClip("movie.gif")
+        clip.write_videofile("movie.mp4")
+        plt.show()   
+

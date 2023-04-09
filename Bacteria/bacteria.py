@@ -24,7 +24,7 @@ class Bacteria():
             Draws the bacteria.
     """
     
-    def __init__(self, x_max=1000, y_max=100, o2=0.5, shape="o", color="saddlebrown", saturation_pop=150):
+    def __init__(self,type= 'Obligate Aerobe',  x_max=20, y_max=100, shape="o", color="saddlebrown", saturation_pop=50):
         """Initializes a bacteria with random starting point on 2D plane. Default location is (0, 0).
            Default o2 affinity is 0.5.
         
@@ -38,28 +38,69 @@ class Bacteria():
             o2 [type: float]
                 Probability that bacteria mutate
         """
-        self.x = random.randint(0, x_max)
-        self.y = random.randint(0, y_max)
-        self.xmax = x_max
-        self.ymax = y_max
+        self.x_max = x_max
+        self.y_max = y_max
+        self.x = random.randint(0, self.x_max)
+        self.y = random.randint(0, self.y_max)
         self.color = color
         self.shape = shape
-        self.loc = (x, y) #Need to randomize this to get even spread through the media
+        self.loc = [self.x, self.y] #Need to randomize this to get even spread through the media
+        if type == 'Obligate Aerobe':
+            self.type = type
+            self.o2 = 1
+            self.tolerant = 'Intolerant'
+        
+    def set_o2(self, o2):
         self.o2 = o2
         
+    def get_o2(self):
+        return self.o2
+    
+    def get_loc(self):
+        return self.loc
         
-    def movement(self,vx=1,vy=1):
+    def movement(self,gradient,vx=1,vy=1):
+        
+        if self.type == 'Obligate Aerobe':
+            if np.random.rand() < 0.8:
+
+                dy = np.random.randint(0,vy)
+            else:
+                dy = np.random.randint(-vy,0)
+        elif self.type == 'Obligate Anaerobe':
+            if np.random.rand() < 0.2:
+
+                dy = np.random.randint(0,vy)
+            else:
+                dy = np.random.randint(-vy,0)
+        elif self.type == 'Facultative Anaerobes':
+            pass
+        elif self.type == 'Aerotolerant Anaerobes':
+            dy = np.random.randint(-vy,vy)
+
+        elif self.type == 'Microaerophiles':
+            if gradient[self.x,self.y] <= 0.8  and gradient[self.x,self.y] >= 0.7:
+                dy = 0
+            elif  gradient[self.x,self.y] > 0.8:
+                dy = np.random.randint(-vy,0)
+            else:
+                dy = np.random.randint(0,dy)
+
+
+
+      #['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
         dx = np.random.randint(-vx,vx)
-        dy = np.random.randint(-vy,vy)
 
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
-            self.x -= dx
+            self.x = dx
         else:
             self.x += dx
         if (self.y + dy > self.y_max) or (self.y + dy < 0):
-            self.y -= dy
+            self.y = dy
         else:
             self.y += dy
+        
+        self.loc = [self.x,self.y]
     
     def mitosis(self, x, y):
         """Returns new bacteria one "space" next to the parent.
@@ -70,10 +111,33 @@ class Bacteria():
             
         """
         pass
-    
-    def set_loc(self):
-        #Would be used to set up random locations in our enviroment
-        pass
+
+    def alive(self,gradient):
+        x = self.x
+        y = self.y
+
+        grad = gradient[x,y]
+        alive = True
+
+        if self.type == 'Obligate Aerobe':
+            if grad < 0.75:
+                alive = False
+
+        elif self.type == 'Obligate Anaerobe':
+            if grad > 0.25:
+                alive = False
+        elif self.type == 'Facultative Anaerobes':
+            pass
+        elif self.type == 'Aerotolerant Anaerobes':
+            pass
+
+        elif self.type == 'Microaerophiles':
+            if grad >= 0.85  or grad <= 0.65:
+                alive = False
+
+        return alive
+
+
     
     def draw(self,ax):
         ax.scatter(self.x, self.y, s=24.0, c=self.color, marker=self.shape)   
