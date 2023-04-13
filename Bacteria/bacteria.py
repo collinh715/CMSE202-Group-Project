@@ -141,5 +141,3 @@ class Bacteria():
     
     def draw(self,ax):
         ax.scatter(self.x, self.y, s=24.0, c=self.color, marker=self.shape)   
-    
- 
