@@ -45,6 +45,7 @@ class Bacteria():
         self.color = color
         self.shape = shape
         self.loc = [self.x, self.y] #Need to randomize this to get even spread through the media
+        self.type = type
         if type == 'Obligate Aerobe':
             self.type = type
             self.o2 = 1
@@ -64,32 +65,32 @@ class Bacteria():
         if self.type == 'Obligate Aerobe':
             if np.random.rand() < 0.8:
 
-                dy = np.random.randint(0,vy)
+                dy = random.randint(0,vy)
             else:
-                dy = np.random.randint(-vy,0)
+                dy = random.randint(-vy,0)
         elif self.type == 'Obligate Anaerobe':
             if np.random.rand() < 0.2:
 
-                dy = np.random.randint(0,vy)
+                dy = random.randint(0,vy)
             else:
-                dy = np.random.randint(-vy,0)
+                dy = random.randint(-vy,0)
         elif self.type == 'Facultative Anaerobes':
             pass
         elif self.type == 'Aerotolerant Anaerobes':
-            dy = np.random.randint(-vy,vy)
+            dy = random.randint(-vy,vy)
 
         elif self.type == 'Microaerophiles':
             if gradient[self.x,self.y] <= 0.8  and gradient[self.x,self.y] >= 0.7:
                 dy = 0
             elif  gradient[self.x,self.y] > 0.8:
-                dy = np.random.randint(-vy,0)
+                dy = random.randint(-vy,0)
             else:
-                dy = np.random.randint(0,dy)
+                dy = random.randint(0,vy)
 
 
-
-      #['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
-        dx = np.random.randint(-vx,vx)
+    #     dy = random.randint(-vx,vx)
+    #   #['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
+        dx = random.randint(-vx,vx)
 
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
             self.x = dx
