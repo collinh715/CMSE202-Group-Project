@@ -14,7 +14,7 @@ def main(runname = ''):
 
     bacteria_types = ['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
     num_bac = 100
-    time = 1000
+    time = 100
     if os.path.exists(f'Results{runname}'):
         shutil.rmtree(f'Results{runname}')
     os.makedirs(f'Results{runname}')
