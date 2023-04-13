@@ -14,7 +14,7 @@ def main(runname = ''):
 
     bacteria_types = ['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
     num_bac = 100
-    time = 100
+    time = 1000
     if os.path.exists(f'Results{runname}'):
         shutil.rmtree(f'Results{runname}')
     os.makedirs(f'Results{runname}')
@@ -56,8 +56,4 @@ def main(runname = ''):
 if __name__ == '__main__':
     main(runname=runname)
 
-# pet = Petri_dish()
-# for i in range(100):
-#     org = Bacteria()
-#     pet.add_agent(org)
-# pet.simulate_save(100,'Obligate Aerobe')
+
