@@ -17,7 +17,6 @@ class Bacteria():
             Ordered pair of coordinates specifying the bacteria's location.
         
     Methods:
-        __init__(c=0, r=0, o2=0.5)
         mitosis()
             Returns a new bacteria.
         draw()

@@ -9,18 +9,27 @@ import moviepy.editor as mp
 
 class Petri_dish():
     """Petri_dish class. 
+    Constructs our enviroment or test tube for our bacteria to move in. 
+    
+    Attributes:
+        xsize=20, ysize=100: Setting boundaries for our test tube.
+        
+    Methods:
+        add_agent(self,agent): Adds bacteria agents to our simulation.
+        
+        simulate_save(self,tot_time,bac): Simulates our enviroment and saves the seperate gifs and 
+                                          mp4 files into folders.
     """
     
     def __init__(self, xsize=20, ysize=100 ):
         self.xsize = xsize
         self.ysize = ysize
-        self.gradient = np.ones((self.xsize+1,self.ysize+1,1))
         self.bacteria_agents = []
 
+        #Sets o2 gradiant.
+        self.gradient = np.ones((self.xsize+1,self.ysize+1,1))
         gradient = []
-
         gradient_step = 1/(ysize-1)
-
         gradient_val = 0
         for i in range(ysize):
             gradient.append(gradient_val)
@@ -32,26 +41,7 @@ class Petri_dish():
    
     def add_agent(self,agent):
         self.bacteria_agents.append(agent)
-    
-    def simulate(self,tot_time):
-        for dt in range(tot_time):
-            plt.figure(figsize=(6, 6))    
-            ax = plt.gca()   
-            
-            # loop over each bacteria
-            temp_agents = []
-            for agent in self.bacteria_agents:
-                agent.movement(self.gradient)
-                agent.draw(ax)
-                temp_agents.append(agent)
-                
-            self.bacteria_agents.clear
-            self.bacteria_agents = temp_agents
-            plt.xlim(0,self.xsize)
-            plt.ylim(0,self.ysize)
-            plt.show()   
-            time.sleep(0.001)      
-
+      
     def simulate_save(self,tot_time,bac):
         gradient = self.gradient
         frames = []
