@@ -82,12 +82,12 @@ class Petri_dish():
         plt.plot(self.times,self.light_brown_animals)   
         plt.show()
 
-    def simulate_save(self,tot_time):
+    def simulate_save(self,tot_time,bac):
         gradient = self.gradient
         frames = []
-
-        fig = plt.figure()
-
+        fig, ax = plt.subplots(figsize=(1,5))
+        # fig = plt.figure(figsize=(1,5),facecolor='khaki')
+        # plt.axhline(50,0,20)
         for dt in range(tot_time):
     
             
@@ -96,17 +96,21 @@ class Petri_dish():
             x = []
             y = []
             for agent in self.bacteria_agents:
-                agent.movement(gradient,vx = 10,vy = 10)
-                if agent.alive(gradient) == True:
-                    temp_agents.append(agent)
-                    x.append(agent.get_loc()[0])
-                    y.append(agent.get_loc()[1])
+                agent.movement(gradient,vx = 1,vy = 1)
+                # if agent.alive(gradient) == True:
+                #     temp_agents.append(agent)
+                #     x.append(agent.get_loc()[0])
+                #     y.append(agent.get_loc()[1])
+                temp_agents.append(agent)
+                x.append(agent.get_loc()[0])
+                y.append(agent.get_loc()[1])
 
             self.bacteria_agents.clear
             self.bacteria_agents = temp_agents
 
             frames.append([plt.scatter(x,y,animated=True, color = 'r')])
-
+        
+        ax.set_facecolor('khaki')
         plt.axis('off')
         plt.xlim(0,self.xsize)
         plt.ylim(0,self.ysize)
@@ -114,8 +118,16 @@ class Petri_dish():
 
         ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True,
                                             repeat_delay=1000)
-        ani.save('movie.gif',fps= 2)
-        clip = mp.VideoFileClip("movie.gif")
-        clip.write_videofile("movie.mp4")
+        
+
+        if len(bac.split()) == 2:
+            name = f'{bac.split()[0]}_{bac.split()[1]}'
+        else:
+            name = f'{bac}'
+
+
+        ani.save(f'{name}.gif',fps= 10)
+        clip = mp.VideoFileClip(f'{name}.gif')
+        clip.write_videofile(f'{name}.mp4')
         plt.show()   
 
