@@ -17,10 +17,7 @@ class Bacteria():
             Ordered pair of coordinates specifying the bacteria's location.
         
     Methods:
-        mitosis()
-            Returns a new bacteria.
-        draw()
-            Draws the bacteria.
+        \
     """
     
     def __init__(self,type= 'Obligate Aerobe',  x_max=20, y_max=100, shape="o", color="saddlebrown", saturation_pop=50):
@@ -45,10 +42,6 @@ class Bacteria():
         self.shape = shape
         self.loc = [self.x, self.y] #Need to randomize this to get even spread through the media
         self.type = type
-        if type == 'Obligate Aerobe':
-            self.type = type
-            self.o2 = 1
-            self.tolerant = 'Intolerant'
         
     def set_o2(self, o2):
         self.o2 = o2
@@ -101,16 +94,6 @@ class Bacteria():
             self.y += dy
         
         self.loc = [self.x,self.y]
-    
-    def mitosis(self, x, y):
-        """Returns new bacteria one "space" next to the parent.
-        
-           How do we do this? We could set up 4 (or 8) directions that take into
-           account the x and y positions and either add or subtract 1 from either,
-           and then select a random one of these positions.
-            
-        """
-        pass
 
     def alive(self,gradient):
         x = self.x
@@ -136,9 +119,4 @@ class Bacteria():
                 alive = False
 
         return alive
-
-
-    
-    def draw(self,ax):
-        ax.scatter(self.x, self.y, s=24.0, c=self.color, marker=self.shape)   
 
