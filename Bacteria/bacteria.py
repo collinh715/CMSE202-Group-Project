@@ -26,17 +26,8 @@ class Bacteria():
         self.y = random.randint(0, self.y_max)
         self.color = color
         self.shape = shape
-<<<<<<< HEAD
-        self.loc = [self.x, self.y] #Need to randomize this to get even spread through the media
-        self.type = type
-        if type == 'Obligate Aerobe':
-            self.type = type
-            self.o2 = 1
-            self.tolerant = 'Intolerant'
-=======
         self.loc = [self.x, self.y]
         self.type = type
->>>>>>> collin
         
     def set_o2(self, o2):
         self.o2 = o2
@@ -74,12 +65,6 @@ class Bacteria():
             else:
                 dy = random.randint(0,vy)
 
-<<<<<<< HEAD
-
-    #     dy = random.randint(-vx,vx)
-    #   #['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
-=======
->>>>>>> collin
         dx = random.randint(-vx,vx)
 
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
@@ -118,12 +103,3 @@ class Bacteria():
 
         return alive
 
-<<<<<<< HEAD
-
-    
-    def draw(self,ax):
-        ax.scatter(self.x, self.y, s=24.0, c=self.color, marker=self.shape)   
-    
- 
-=======
->>>>>>> collin
