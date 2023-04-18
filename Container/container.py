@@ -45,8 +45,9 @@ class Petri_dish():
     def simulate_save(self,tot_time,bac):
         gradient = self.gradient
         frames = []
-        fig, ax = plt.subplots(figsize=(1,5))
-        
+        fig,ax = plt.subplots(figsize=(1,5))
+        # plt.figure(figsize=(1,5))
+        # ax = plt.gca()
         for dt in range(tot_time):
     
             
@@ -69,10 +70,10 @@ class Petri_dish():
 
             frames.append([plt.scatter(x,y,animated=True, color = 'r')])
         
-        ax.set_facecolor('khaki')
+        ax.set_facecolor("orange")
         plt.axis('off')
-        plt.xlim(0,self.xsize)
-        plt.ylim(0,self.ysize)
+        plt.xlim(-10,self.xsize+10)
+        plt.ylim(-10,self.ysize+10)
 
 
         ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True,

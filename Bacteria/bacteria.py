@@ -63,7 +63,7 @@ class Bacteria():
 
         elif self.type == 'Microaerophiles':
             if gradient[self.x,self.y] <= 0.8  and gradient[self.x,self.y] >= 0.7:
-                dy = 0
+                dy = random.randint(-vy,vy)
             elif  gradient[self.x,self.y] > 0.8:
                 dy = random.randint(-vy,0)
             else:
@@ -72,11 +72,11 @@ class Bacteria():
         dx = random.randint(-vx,vx)
 
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
-            self.x = dx
+            self.x -= dx
         else:
             self.x += dx
         if (self.y + dy > self.y_max) or (self.y + dy < 0):
-            self.y = dy
+            self.y -= dy
         else:
             self.y += dy
         
