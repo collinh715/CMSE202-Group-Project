@@ -4,20 +4,6 @@ import matplotlib.pyplot as plt
 
 class Bacteria():
     """Bacteria class. 
-    Each bacteria species needs to have a prefered oxygen 
-    concentration as well as rules that governs its motion.
-    We also need to distribute and size our population evenly
-    
-    
-    Attributes:
-        o2 [type: int64]
-            Number from 0 to 1, 0 meaning the bacteria dies from oxygen and
-            1 meaning that it needs oxygen to survive.
-        loc [type: tuple]
-            Ordered pair of coordinates specifying the bacteria's location.
-        
-    Methods:
-        \
     """
     
     def __init__(self,type= 'Obligate Aerobe',  x_max=20, y_max=100, shape="o", color="saddlebrown", saturation_pop=50):
@@ -31,8 +17,8 @@ class Bacteria():
             y [type: int]
                 Specifies the row of the bacteria in a 2d grid.
                 
-            o2 [type: float]
-                Probability that bacteria mutate
+            type [type: float]
+                Type of bacteria we are aiming to model.
         """
         self.x_max = x_max
         self.y_max = y_max
@@ -40,7 +26,7 @@ class Bacteria():
         self.y = random.randint(0, self.y_max)
         self.color = color
         self.shape = shape
-        self.loc = [self.x, self.y] #Need to randomize this to get even spread through the media
+        self.loc = [self.x, self.y]
         self.type = type
         
     def set_o2(self, o2):
@@ -79,9 +65,6 @@ class Bacteria():
             else:
                 dy = random.randint(0,vy)
 
-
-    #     dy = random.randint(-vx,vx)
-    #   #['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
         dx = random.randint(-vx,vx)
 
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
