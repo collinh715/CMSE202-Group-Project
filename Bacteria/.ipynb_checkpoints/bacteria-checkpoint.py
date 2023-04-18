@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 
 class Bacteria():
     """Bacteria class. 
+    
+    Methods:
+        get_loc: 
+            Returns location of bacteria in x and y cords.
+        
+        movement: 
+            Sets up movement with probability the the bacteria will move towards its prefered oxygen concentration.
+        
+        alive:
+            Sets up requirements for the survival of the bacteria, as well as conditions for its probable death.
     """
     
     def __init__(self,type= 'Obligate Aerobe',  x_max=20, y_max=100, shape="o", color="saddlebrown", saturation_pop=50):
@@ -28,12 +38,6 @@ class Bacteria():
         self.shape = shape
         self.loc = [self.x, self.y]
         self.type = type
-        
-    def set_o2(self, o2):
-        self.o2 = o2
-        
-    def get_o2(self):
-        return self.o2
     
     def get_loc(self):
         return self.loc
