@@ -38,14 +38,22 @@ class Bacteria():
         self.loc = [self.x, self.y]
         self.type = type
         self.death = 0
+
+        self.stay = True
+        if np.random.rand() < 0.8:
+            self.stay = False
     
     def get_loc(self):
         return self.loc
         
     def movement(self,gradient,vx=1,vy=1):
-        
+        x = self.x
+        y = self.y
+
+        grad = gradient[x,y]
+
         if self.type == 'Obligate Aerobe':
-            if gradient[self.x,self.y] >= 0.85:
+            if grad >= 0.85:
                 dy = random.randint(-vy,vy)
             else:
                 if np.random.rand() < 0.8:
@@ -54,7 +62,7 @@ class Bacteria():
                 else:
                     dy = random.randint(-vy,0)
         elif self.type == 'Obligate Anaerobe':
-            if gradient[self.x,self.y] <= 0.15:
+            if grad <= 0.15:
                 dy = random.randint(-vy,vy)
             else:
                 if np.random.rand() < 0.2:
@@ -63,12 +71,23 @@ class Bacteria():
                 else:
                     dy = random.randint(-vy,0)
         elif self.type == 'Facultative Anaerobes':
-            pass
+            if grad >= 0.85 or self.stay:
+                dy = random.randint(-vy,vy)
+
+            else:
+                # if  (0.85 -grad)/0.85 < np.random.rand():
+                if  (1-grad) < np.random.rand():
+                    dy = random.randint(-vy,vy)
+                else:
+                    dy = random.randint(0,vy)
+
+
+            
         elif self.type == 'Aerotolerant Anaerobes':
             dy = random.randint(-vy,vy)
 
         elif self.type == 'Microaerophiles':
-            if gradient[self.x,self.y] <= 0.8  and gradient[self.x,self.y] >= 0.7:
+            if grad <= 0.8  and grad >= 0.7:
                 dy = random.randint(-vy,vy)
             elif  gradient[self.x,self.y] > 0.8:
                 dy = random.randint(-vy,0)

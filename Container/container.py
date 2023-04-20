@@ -58,10 +58,7 @@ class Petri_dish():
                     temp_agents.append(agent)
                     x.append(agent.get_loc()[0])
                     y.append(agent.get_loc()[1])
-                # temp_agents.append(agent)
-                # x.append(agent.get_loc()[0])
-                # y.append(agent.get_loc()[1])
-
+                
             self.bacteria_agents.clear
             self.bacteria_agents = temp_agents
 
@@ -82,7 +79,7 @@ class Petri_dish():
             name = f'{bac}'
 
 
-        ani.save(f'{name}.gif',fps= 10)
+        ani.save(f'{name}.gif',fps= 20)
         clip = mp.VideoFileClip(f'{name}.gif')
         clip.write_videofile(f'{name}.mp4')
         plt.show()   

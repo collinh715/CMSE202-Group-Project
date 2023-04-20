@@ -14,13 +14,12 @@ def main(runname = ''):
 
     bacteria_types = ['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
     num_bac = 100
-    time = 150
+    time = 200
     if os.path.exists(f'Results{runname}'):
         shutil.rmtree(f'Results{runname}')
     os.makedirs(f'Results{runname}')
 
 
-    bacteria_types.remove('Facultative Anaerobes')
     for bac in bacteria_types:
 
         if len(bac.split()) == 2:
