@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import matplotlib.pyplot as plt
 
 class Bacteria():
     """Bacteria class. 
@@ -38,6 +37,7 @@ class Bacteria():
         self.shape = shape
         self.loc = [self.x, self.y]
         self.type = type
+        self.death = 0
     
     def get_loc(self):
         return self.loc
@@ -45,17 +45,23 @@ class Bacteria():
     def movement(self,gradient,vx=1,vy=1):
         
         if self.type == 'Obligate Aerobe':
-            if np.random.rand() < 0.8:
-
-                dy = random.randint(0,vy)
+            if gradient[self.x,self.y] >= 0.85:
+                dy = random.randint(-vy,vy)
             else:
-                dy = random.randint(-vy,0)
+                if np.random.rand() < 0.8:
+
+                    dy = random.randint(0,vy)
+                else:
+                    dy = random.randint(-vy,0)
         elif self.type == 'Obligate Anaerobe':
-            if np.random.rand() < 0.2:
-
-                dy = random.randint(0,vy)
+            if gradient[self.x,self.y] <= 0.15:
+                dy = random.randint(-vy,vy)
             else:
-                dy = random.randint(-vy,0)
+                if np.random.rand() < 0.2:
+
+                    dy = random.randint(0,vy)
+                else:
+                    dy = random.randint(-vy,0)
         elif self.type == 'Facultative Anaerobes':
             pass
         elif self.type == 'Aerotolerant Anaerobes':
@@ -90,20 +96,31 @@ class Bacteria():
         alive = True
 
         if self.type == 'Obligate Aerobe':
-            if grad < 0.75:
-                alive = False
+            if grad < .85:
+                val = (.85-grad)/(.85)
+                self.death += val 
 
         elif self.type == 'Obligate Anaerobe':
-            if grad > 0.25:
-                alive = False
+            if grad > .15:
+                val = (grad-0.15)/(.85)
+                self.death += val 
+
         elif self.type == 'Facultative Anaerobes':
             pass
         elif self.type == 'Aerotolerant Anaerobes':
             pass
 
         elif self.type == 'Microaerophiles':
-            if grad >= 0.85  or grad <= 0.65:
-                alive = False
+            if grad > 0.8:
+                val = (grad - 0.8)/0.7
+                self.death += val
+            elif grad < 0.7:
+                val = (0.7 - grad)/0.8
+                self.death += val 
+                
+
+        if self.death >40:
+            alive = False
 
         return alive
 
