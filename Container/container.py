@@ -44,7 +44,10 @@ class Petri_dish():
         gradient = self.gradient
         frames = []
         fig,ax = plt.subplots(figsize=(1,5))
-     
+
+        xf = []
+        yf = []
+
         for dt in range(tot_time):
     
             
@@ -63,7 +66,12 @@ class Petri_dish():
             self.bacteria_agents = temp_agents
 
             frames.append([plt.scatter(x,y,animated=True, color = 'r')])
-        
+
+            if dt == (tot_time-1):
+                xf = x
+                yf = y
+
+                
         plt.axis('off')
         plt.xlim(-10,self.xsize+10)
         plt.ylim(-10,self.ysize+10)
@@ -82,5 +90,14 @@ class Petri_dish():
         ani.save(f'{name}.gif',fps= 20)
         clip = mp.VideoFileClip(f'{name}.gif')
         clip.write_videofile(f'{name}.mp4')
-        plt.show()   
+
+        figf, axf = plt.subplots(figsize=(2,10))
+        axf.scatter(x, y)
+        axf.set_ylim(-10,self.ysize+10)
+        axf.set_xlim(-10,self.xsize+10)
+        axf.set_title(f'Final Time Step for {name}')
+        axf.axis('off')
+        figf.savefig(name)
+
+        # plt.show()   
 

@@ -42,6 +42,8 @@ def main(runname = ''):
 
         shutil.move(f'{name}.gif',dir)
         shutil.move(f'{name}.mp4',dir)
+        shutil.move(f'{name}.png',dir)
+
 
 
 
