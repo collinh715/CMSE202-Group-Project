@@ -11,6 +11,14 @@ else:
     runname = ''
 
 def main(runname = ''):
+    '''
+    The main program takes an optional argument runame, to rename the the directory of the results file
+    The purpose of this function and script is to interate through each type of bacteria, given an intial amount num_bac
+    and total time, time, for the simulation to run, and it will run the simulation by importing the two classes made in
+    the other files. It then saves and moves each of the .png, .gif. and .mp4 files into a create directory with the name 
+    of the bacteria. This creates a simple way to create and store resultsin files without having to do them manually. 
+    Running this script will run the main function.
+    '''
 
     bacteria_types = ['Obligate Aerobe','Obligate Anaerobe', 'Facultative Anaerobes', 'Aerotolerant Anaerobes','Microaerophiles']
     num_bac = 100

@@ -15,7 +15,7 @@ class Petri_dish():
     Methods:
         add_agent(self,agent): Adds bacteria agents to our simulation.
         
-        simulate_save(self,tot_time,bac): Simulates our enviroment and saves the seperate gifs and 
+        simulate_save(self,tot_time,bac): Simulates our enviroment and saves the seperate gifs,png, and 
                                           mp4 files into folders.
     """
     
@@ -29,7 +29,7 @@ class Petri_dish():
         gradient = []
         gradient_step = 1/(ysize-1)
         gradient_val = 0
-        for i in range(ysize):
+        for i in range(ysize): #This sets the linear gradient
             gradient.append(gradient_val)
             gradient_val += gradient_step
         for i in range(ysize):
@@ -43,7 +43,12 @@ class Petri_dish():
     def simulate_save(self,tot_time,bac):
         gradient = self.gradient
         frames = []
-        fig,ax = plt.subplots(figsize=(1,5))
+        fig,ax = plt.subplots(figsize=(2,10))
+
+        if len(bac.split()) == 2:
+            name = f'{bac.split()[0]}_{bac.split()[1]}'
+        else:
+            name = f'{bac}'
 
         xf = []
         yf = []
@@ -56,18 +61,18 @@ class Petri_dish():
             x = []
             y = []
             for agent in self.bacteria_agents:
-                agent.movement(gradient,vx = 1,vy = 1)
-                if agent.alive(gradient) == True:
-                    temp_agents.append(agent)
-                    x.append(agent.get_loc()[0])
+                agent.movement(gradient,vx = 1,vy = 1) #let's the bacteria move
+                if agent.alive(gradient) == True: #checks if bacteria is alive
+                    temp_agents.append(agent) #appends alive bacteria to next iteration
+                    x.append(agent.get_loc()[0]) #gets x and y coordinates
                     y.append(agent.get_loc()[1])
                 
-            self.bacteria_agents.clear
-            self.bacteria_agents = temp_agents
+            self.bacteria_agents.clear #clears old list
+            self.bacteria_agents = temp_agents #appends new
 
-            frames.append([plt.scatter(x,y,animated=True, color = 'r')])
+            frames.append([plt.scatter(x,y,animated=True, color = 'r')]) #adds current plot to frame list
 
-            if dt == (tot_time-1):
+            if dt == (tot_time-1):#saves the positions at final frame
                 xf = x
                 yf = y
 
@@ -75,16 +80,15 @@ class Petri_dish():
         plt.axis('off')
         plt.xlim(-10,self.xsize+10)
         plt.ylim(-10,self.ysize+10)
+        ax.set_title(name)
+        ax.axvspan(-3,self.xsize+3,ymax = (self.ysize+3)/(self.ysize+10),ymin =(7)/(self.ysize+10),alpha = 0.5, color = 'khaki')
 
 
-        ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True,
+        ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True, #saves each frame in order as an animation
                                             repeat_delay=1000)
         
 
-        if len(bac.split()) == 2:
-            name = f'{bac.split()[0]}_{bac.split()[1]}'
-        else:
-            name = f'{bac}'
+        
 
 
         ani.save(f'{name}.gif',fps= 20)
@@ -92,12 +96,13 @@ class Petri_dish():
         clip.write_videofile(f'{name}.mp4')
 
         figf, axf = plt.subplots(figsize=(2,10))
-        axf.scatter(x, y)
+        axf.scatter(x, y,color = 'r') #saves last frame as an .png fule
         axf.set_ylim(-10,self.ysize+10)
         axf.set_xlim(-10,self.xsize+10)
-        axf.set_title(f'Final Time Step for {name}')
+        axf.set_title(name)
         axf.axis('off')
+        axf.axvspan(-3,self.xsize+3,ymax = (self.ysize+3)/(self.ysize+10),ymin =(7)/(self.ysize+10),alpha = 0.5, color = 'khaki')
+
         figf.savefig(name)
 
-        # plt.show()   
 

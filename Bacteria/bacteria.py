@@ -15,7 +15,7 @@ class Bacteria():
             Sets up requirements for the survival of the bacteria, as well as conditions for its probable death.
     """
     
-    def __init__(self,type= 'Obligate Aerobe',  x_max=20, y_max=100, shape="o", color="saddlebrown", saturation_pop=50):
+    def __init__(self,type,  x_max=20, y_max=100):
         """Initializes a bacteria with random starting point on 2D plane. Default location is (0, 0).
            Default o2 affinity is 0.5.
         
@@ -28,25 +28,47 @@ class Bacteria():
                 
             type [type: float]
                 Type of bacteria we are aiming to model.
+
+            death [type: float]
+                a float that represents the sum of the normalizes distance a bacteria is away from prefered concentration, 
+                when greater than a specified number the bacteria dies
+            
+            stay[type: bool]
+                a boolean that represents whether or not a faculative anaerobe will be indifferent to the o2 concentration
         """
         self.x_max = x_max
         self.y_max = y_max
-        self.x = random.randint(0, self.x_max)
+        self.x = random.randint(0, self.x_max)#x,y are randomly generated between the maxes
         self.y = random.randint(0, self.y_max)
-        self.color = color
-        self.shape = shape
-        self.loc = [self.x, self.y]
+        self.loc = [self.x, self.y] # location in x,y coordinates
         self.type = type
         self.death = 0
 
         self.stay = True
-        if np.random.rand() < 0.8:
+        if np.random.rand() < 0.8:# there is an 80% probanility that a bacteria will not stay put for FA's
             self.stay = False
     
     def get_loc(self):
+        '''
+        Returns the location of a bacteria in x,y coordinates
+        '''
         return self.loc
         
     def movement(self,gradient,vx=1,vy=1):
+        '''
+        Sets up movement with probability the the bacteria will move towards its prefered oxygen concentration.
+
+        Args:
+            gradient[type: numpy array]:
+                a multi dimensional array that contains the oxygen gradient at every location
+
+            vx,vy [type: int]:
+                The max movement in the x and y direction repesctively
+
+        A bacteria will move randomly if it in its perfered oxygen concentration, if it is not, it will preferntially
+        move towards the prefered oxygen with some probability. This movement towards and away is only for the y direction
+        the x direction movement is completely random for all type of bacteria.
+        '''
         x = self.x
         y = self.y
 
@@ -75,7 +97,6 @@ class Bacteria():
                 dy = random.randint(-vy,vy)
 
             else:
-                # if  (0.85 -grad)/0.85 < np.random.rand():
                 if  (1-grad) < np.random.rand():
                     dy = random.randint(-vy,vy)
                 else:
@@ -95,7 +116,10 @@ class Bacteria():
                 dy = random.randint(0,vy)
 
         dx = random.randint(-vx,vx)
-
+        '''
+        This part checks if the bacteria's movement will move outside of the vile, if it does
+        it mantains its current position in that direction.
+        '''
         if (self.x + dx > self.x_max) or (self.x + dx < 0):
             self.x -= dx
         else:
@@ -108,6 +132,19 @@ class Bacteria():
         self.loc = [self.x,self.y]
 
     def alive(self,gradient):
+        '''
+        Sets up requirements for the survival of the bacteria, as well as conditions for its probable death.
+
+        Args:
+            gradient[type: numpy array]:
+                a multi dimensional array that contains the oxygen gradient at every location
+
+        This method will add a float to the death attribute depending on how far away the bacteria
+        is from its prefered oxygen concentration. This is a normalized value. If the death attribute 
+        is more than a specified value, then the bacteria is dead, and alive is set to false, if it is
+        not, it remains true and the bacteria is set for the next interation.
+      
+        '''
         x = self.x
         y = self.y
 
